@@ -49,7 +49,7 @@ export const logout = (req, res) => {
 export const signup = async (req, res) => {
   try {
     console.log(req.body);
-    const { name, email, dob, gender, phone, password, image } = req.body;
+    const { name, email, dob, gender, phone, password, profilePic } = req.body;
 
     // Check if the user already exists
     let existingUser  = await User.findOne({ email: "ahvi@gmail.com"  }); // Use findOne instead of findAll
@@ -70,7 +70,7 @@ export const signup = async (req, res) => {
       gender,
       phone,
       password: hashedPassword,
-      image,
+      profilePic,
     });
 
     // Save the user to the database
@@ -84,3 +84,39 @@ export const signup = async (req, res) => {
   }
 };
 
+export const updateProfile = async (req, res) => {
+  try {
+    const { profilePic } = req.body;
+    const userId = req.user._id;
+
+    // Check if profilePic is not provided
+    if (!profilePic) {
+      return res.status(400).json({ message: "Profile picture is required" });
+    }
+
+    // Upload the profile picture to Cloudinary
+    const uploadResponse = await cloudinary.uploader.upload(profilePic);
+    
+    // Update the user's profile picture in the database
+    const updateUser = await User.findByIdAndUpdate(
+      userId,
+      { profilePic: uploadResponse.secure_url },
+      { new: true }
+    );
+
+    // Respond with the updated user information
+    res.status(200).json(updateUser);
+  } catch (error) {
+    console.error("Update profile error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const checkAuth = async (req, res) => {
+  try{
+    res.status(200).json(req.user);
+  }catch (error) {
+    console.log("error in checkAuth", error.message);
+    res.status(500).json({ message: "Internal server error", error: error.message });
+  }
+}
