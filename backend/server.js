@@ -3,10 +3,13 @@ import dotenv from 'dotenv';
 import cors from 'cors'; // Import the cors package
 import authRoutes from './routes/auth.routes.js';
 import connectToMongoDB from './lib/db.js';
+import cookieParser from 'cookie-parser';
+
 
 dotenv.config();
 
 const app = express();
+app.use(cookieParser());
 app.use(cors({
   origin: process.env.CLIENT_URL,
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',

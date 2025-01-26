@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import userImage from '../assets/user.png';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-
+import { useAuthStore } from '../store/useAuthStore';
 export default function SignUp() {
   const [formData, setFormData] = useState({
     name: '',
@@ -15,7 +15,10 @@ export default function SignUp() {
     image: null,
   });
 
+  const {signup} = useAuthStore();
+
   const navigate = useNavigate();
+
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -32,18 +35,7 @@ export default function SignUp() {
     for (const key in formData) {
       data.append(key, formData[key]);
     }
-    try {
-      await axios.post(`http://localhost:8001/api/auth/signup`, data, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'Accept': 'application/json',
-        },
-        withCredentials: true,
-      });
-      navigate('/'); // Redirect after successful registration
-    } catch (error) {
-      console.error("Registration error:", error);
-    }
+    signup(formData);
   };
 
   return (

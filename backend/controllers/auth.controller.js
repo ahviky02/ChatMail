@@ -64,8 +64,8 @@ export const signup = async (req, res) => {
       password: hashedPassword,
     });
 
-    // Handle profile picture upload if provided
     if (req.file) {
+      console.log("Profile picture uploaded");
       const uploadResponse = await cloudinary.uploader.upload(req.file.path);
       newUser.profilePic = uploadResponse.secure_url;
     }

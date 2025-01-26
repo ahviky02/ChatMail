@@ -1,16 +1,43 @@
-import React from 'react';
+import React, { useState } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
+import { useAuthStore } from '../store/useAuthStore';
 
 function SignIn() {
+
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  }
+
+  const {login} = useAuthStore();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(formData);
+    login(formData);
+  }
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <Toaster />
       <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
         <h2 className="text-2xl font-bold text-center text-primary">Sign In</h2>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div>
             <label className="block text-sm font-medium text-gray-700">Email</label>
             <input
               type="email"
+              name="email"
               required
+              onChange={handleChange}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-primary"
             />
           </div>
@@ -18,7 +45,9 @@ function SignIn() {
             <label className="block text-sm font-medium text-gray-700">Password</label>
             <input
               type="password"
+              name="password"
               required
+              onChange={handleChange}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-primary"
             />
           </div>
