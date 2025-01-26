@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Signin from './Auth/sign-in';
 import Signup from './Auth/sign-up';
+import Menu from './components/Menu';
+import Elements from './components/Elements';
 import { useAuthStore } from './store/useAuthStore';
 import { Loader } from 'lucide-react';
 import Navbar from './components/Navbar';
@@ -25,9 +27,17 @@ function App() {
     <>
       <Router>
         <Routes>
+          {
+            authUser ? <Route path="/" element={<div><Navbar />
+            <div>
+            <Menu />
+            </div>
+              </div>} /> : <Route path="/" element={<Signin />} />
+
+          }
+
           <Route path="/signup" element={<Signup />} />
           <Route path="/signin" element={<Signin />} />
-          <Route path="/navbar" element={<Navbar />} />
         </Routes>
       </Router>
     </>

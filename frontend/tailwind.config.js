@@ -12,6 +12,9 @@ export default {
           background: '#4a148c', // Background color
           text: '#ffffff', // Text color
         },
+        secondary: {
+          
+        }
       },
     },
   },
