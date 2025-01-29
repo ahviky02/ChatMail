@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors'; // Import the cors package
 import authRoutes from './routes/auth.routes.js';
+import chatRoutes from './routes/chat.routes.js';
 import connectToMongoDB from './lib/db.js';
 import cookieParser from 'cookie-parser';
 
@@ -22,6 +23,7 @@ app.use(express.json());
 const PORT = process.env.PORT || 8080;
 
 app.use("/api/auth", authRoutes);
+app.use("/api/chat", chatRoutes);
 
 app.listen(PORT, () => {
   connectToMongoDB();

@@ -1,13 +1,27 @@
 import React from 'react';
+import { SendHorizontal,Send,Mail,MessagesSquare } from 'lucide-react';
 
 const Menu = () => {
     return (
-        <div className="fixed left-0 top-0 w-34 bg-white p-4 hidden sm:inline">
+        <div className="fixed left-0 top-0 w-34 p-4 hidden sm:inline">
             <h5 className="text-lg font-semibold mb-4">Menu</h5>
-            <a href="#" className="block py-2 mt-2  rounded px-3 ${}">Compose</a>
-            <a href="#" className="block py-2 mt-2  rounded px-3">Inbox</a>
-            <a href="#" className="block py-2 mt-2  rounded px-3">Send</a>
-            <a href="#" className="block py-2 mt-2  rounded px-3">Quick Talk</a>
+            <button className="flex gap-2 items-center mt-4" aria-label="Profile">
+                <SendHorizontal className="size-5  flex items-center justify-center" />
+                <span className="hidden sm:inline">Compose</span>
+            </button>
+            <button className="flex gap-2 items-center mt-4" aria-label="Profile">
+                <Send className="size-5  flex items-center justify-center" />
+                <span className="hidden sm:inline">Send</span>
+            </button>
+            <button className="flex gap-2 items-center mt-4" aria-label="Profile">
+                <Mail className="size-5  flex items-center justify-center" />
+                <span className="hidden sm:inline">Inbox</span>
+            </button>
+            <button className="flex gap-2 items-center mt-4" aria-label="Profile">
+                <MessagesSquare className="size-5  flex items-center justify-center" />
+                <span className="hidden sm:inline">Quick Talk</span>
+            </button>
+          
         </div>
     );
 };
