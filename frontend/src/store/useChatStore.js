@@ -16,18 +16,24 @@ export const useChatStore = create((set) => ({
       set({ users: res.data });
     } catch (error) {
       toast.error('Failed to fetch users');
+      console.error('Fetch users error:', error);
     } finally {
       set({ isUserLoading: false });
     }
   },
 
-  getMessages: async (userId) => {
+  getMessages: async (sender, receiver) => {
     set({ isMessageLoading: true });
     try {
-      const res = await axiosInstance.post('/chat/messages');
-      set({ messages: res.data });
+      const res = await axiosInstance.put('/chat/getMessages', { sender, receiver });
+      if (res.data.length === 0) {
+        toast.error('No messages found between the specified users');
+      } else {
+        set({ messages: res.data });
+      }
     } catch (error) {
       toast.error('Failed to fetch messages');
+      console.error('Fetch messages error:', error);
     } finally {
       set({ isMessageLoading: false });
     }
@@ -37,7 +43,7 @@ export const useChatStore = create((set) => ({
     set({ selectedUser: user });
   },
 
-  newUsers: async (data) => {
+  addNewUser: async (data) => {
     set((state) => ({ users: [...state.users, data] }));
   }
 }));
