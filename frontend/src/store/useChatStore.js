@@ -23,6 +23,19 @@ export const useChatStore = create((set, get) => ({
     }
   },
 
+  seachUsers: async (search) => {
+    set({ isUserLoading: true }); // Fixed: Changed 'isUser Loading' to 'isUserLoading'
+    try {
+      const res = await axiosInstance.get(`/chat/users?search=${search}`);
+      set({ users: res.data });
+    } catch (error) {
+      toast.error('Failed to search users');
+      console.error('Search users error:', error);
+    } finally {
+      set({ isUserLoading: false }); // Fixed: Changed 'isUser Loading' to 'isUserLoading'
+    }
+  },
+
   getMessages: async (sender, receiver) => {
     set({ isMessageLoading: true });
     console.log('sender:', sender, 'receiver:', receiver);

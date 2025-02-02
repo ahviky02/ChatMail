@@ -2,7 +2,6 @@ import { useAuthStore } from "../store/useAuthStore";
 import { useChatStore } from "../store/useChatStore";
 import userpic from '../assets/user.png';
 
-
 const UsersElements = ({ users }) => {
   const { setSelectedUser, getMessages } = useChatStore();
   const { authUser } = useAuthStore();
@@ -17,7 +16,7 @@ const UsersElements = ({ users }) => {
       {users.length ? (
         users.map((user) => (
           <div
-            key={user.id}
+            key={user._id} // Ensure this is a unique identifier for each user
             onClick={() => handleUserSelect(user)}
             className="flex items-center p-2 hover:bg-gray-800 cursor-pointer rounded"
           >

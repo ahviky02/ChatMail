@@ -6,7 +6,7 @@ import UsersElements from '../components/UsersElements';
 import UserContent from '../components/UserContent';
 
 const Chat = () => {
-  const { users, getUsers, selectedUser } = useChatStore();
+  const { users, getUsers, selectedUser ,seachUsers} = useChatStore();
 
   useEffect(() => {
     getUsers();
@@ -28,6 +28,7 @@ const Chat = () => {
               <input 
                 type="search" 
                 className="w-full p-2 mb-4 bg-gray-800 text-white rounded" 
+                onChange={(e) => seachUsers(e.target.value)}
                 placeholder="Search Users" 
               />
               <div className="flex-1 overflow-y-auto">

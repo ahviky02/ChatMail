@@ -1,11 +1,12 @@
 import { useChatStore } from "../store/useChatStore";
 import { useAuthStore } from "../store/useAuthStore";
 import userpic from '../assets/user.png';
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 const UserContent = ({ user }) => {
   const { getMessages, sendMessage, subscribeToMessages, unsubscribeFromMessages, messages, isMessageLoading } = useChatStore();
   const { authUser } = useAuthStore();
+  const messagesEndRef = useRef(null); // Create a ref for the messages container
 
   useEffect(() => {
     if (authUser && user) {
@@ -17,6 +18,13 @@ const UserContent = ({ user }) => {
       };
     }
   }, [authUser, user, getMessages, subscribeToMessages, unsubscribeFromMessages]);
+
+  useEffect(() => {
+    // Scroll to the bottom of the chat when messages change
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]); // Run this effect whenever messages change
 
   const handleSendChat = (e) => {
     if (e.key === 'Enter' && e.target.value.trim()) {
@@ -38,7 +46,7 @@ const UserContent = ({ user }) => {
           <p className="text-gray-400">{user.email}</p>
         </div>
       </div>
-      <div className="bg-gray-700 p-4 rounded-lg shadow-inner flex flex-col h-4/5 overflow-y-scroll behavior-smooth-down">
+      <div className="bg-gray-700 p-4 rounded-lg shadow-inner flex flex-col h-4/5 overflow-y-scroll">
         {isMessageLoading ? (
           <p>Loading messages...</p>
         ) : messages.length > 0 ? (
@@ -50,6 +58,7 @@ const UserContent = ({ user }) => {
         ) : (
           <p>No messages found.</p>
         )}
+        <div ref={messagesEndRef} /> {/* This div will be used to scroll to the bottom */}
       </div>
       <input
         type="text"
