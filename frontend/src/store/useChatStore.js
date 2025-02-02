@@ -25,7 +25,7 @@ export const useChatStore = create((set, get) => ({
 
   getMessages: async (sender, receiver) => {
     set({ isMessageLoading: true });
-    // console.log('sender:', sender, 'receiver:', receiver);
+    console.log('sender:', sender, 'receiver:', receiver);
     try {
       const res = await axiosInstance.post('/chat/getMessages', { sender, receiver });
       // console.log('res:', res);
@@ -49,6 +49,10 @@ export const useChatStore = create((set, get) => ({
   sendMessage: async (data) => {
     try {
       await axiosInstance.post('/chat/sentMessage', data);
+      console.log('Message sent:', data.message);
+      set((state) => ({
+        messages: [...state.messages, { text: data.message, senderId: data.sender }]
+      }));
       // Optionally, you can also update the messages state here if needed
     } catch (error) {
       toast.error('Failed to send message');

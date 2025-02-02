@@ -1,17 +1,16 @@
 import { useChatStore } from "../store/useChatStore";
 import { useAuthStore } from "../store/useAuthStore";
+import userpic from '../assets/user.png';
 import { useEffect } from "react";
 
 const UserContent = ({ user }) => {
-  const { getMessages, sendMessage, subscribeToMessages, unsubscribeFromMessages } = useChatStore();
+  const { getMessages, sendMessage, subscribeToMessages, unsubscribeFromMessages, messages, isMessageLoading } = useChatStore();
   const { authUser } = useAuthStore();
-  const { messages, isMessageLoading } = useChatStore();
 
   useEffect(() => {
     if (authUser && user) {
       getMessages(authUser._id, user._id);
       subscribeToMessages();
-      // console.log("messages", messages[[0]].text);
 
       return () => {
         unsubscribeFromMessages();
@@ -20,9 +19,8 @@ const UserContent = ({ user }) => {
   }, [authUser, user, getMessages, subscribeToMessages, unsubscribeFromMessages]);
 
   const handleSendChat = (e) => {
-    if (e.key === 'Enter' && e.target.value) {
-      sendMessage({ sender: authUser._id, receiver: user._id, message: e.target.value });
-      subscribeToMessages();
+    if (e.key === 'Enter' && e.target.value.trim()) {
+      sendMessage({ sender: authUser._id, receiver: user._id, message: e.target.value.trim() });
       e.target.value = '';
     }
   };
@@ -31,7 +29,7 @@ const UserContent = ({ user }) => {
     <div className="p-4 bg-gray-800 text-white rounded-lg shadow-md h-full">
       <div className="flex items-center mb-4">
         <img
-          src={user.profilePic || '../assets/user.png'} // Fixed path to user image
+          src={user.profilePic || userpic}
           alt="User avatar"
           className="w-20 h-20 rounded-full"
         />
@@ -40,7 +38,7 @@ const UserContent = ({ user }) => {
           <p className="text-gray-400">{user.email}</p>
         </div>
       </div>
-      <div className="bg-gray-700 p-4 rounded-lg shadow-inner flex flex-col h-4/5 overflow-y-scroll">
+      <div className="bg-gray-700 p-4 rounded-lg shadow-inner flex flex-col h-4/5 overflow-y-scroll behavior-smooth-down">
         {isMessageLoading ? (
           <p>Loading messages...</p>
         ) : messages.length > 0 ? (

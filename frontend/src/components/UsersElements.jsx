@@ -1,5 +1,7 @@
 import { useAuthStore } from "../store/useAuthStore";
 import { useChatStore } from "../store/useChatStore";
+import userpic from '../assets/user.png';
+
 
 const UsersElements = ({ users }) => {
   const { setSelectedUser, getMessages } = useChatStore();
@@ -20,7 +22,7 @@ const UsersElements = ({ users }) => {
             className="flex items-center p-2 hover:bg-gray-800 cursor-pointer rounded"
           >
             <img
-              src={user.avatar}
+              src={user.profilePic || userpic}
               alt="avatar"
               className="w-10 h-10 rounded-full"
             />

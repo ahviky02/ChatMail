@@ -1,6 +1,7 @@
 import User from '../models/user.model.js';
 import Message from '../models/chat.model.js';
-import {getReceiverSocketId} from '../lib/socket.js';
+import { getReceiverSocketId } from '../lib/socket.js';
+import { io } from '../lib/socket.js'; // Ensure you import io if you're using it
 
 export const getChatUsers = async (req, res) => {
   try {
@@ -9,7 +10,6 @@ export const getChatUsers = async (req, res) => {
 
     // Respond with the list of users in JSON format
     res.status(200).json(users);
-
   } catch (error) {
     // Log and respond with an error message in case of failure
     console.error('Get chat users error:', error);
@@ -21,7 +21,12 @@ export const getChatMessages = async (req, res) => {
   const { sender, receiver } = req.body;
   try {
     // Fetch messages from the Message model
-    const messages = await Message.find({ senderId: sender, receiverId: receiver });
+    const messages = await Message.find({
+      $or: [
+        { senderId: sender, receiverId: receiver },
+        { senderId: receiver, receiverId: sender }
+      ]
+    });
 
     if (messages.length === 0) {
       // If no messages are found, respond with a specific message
@@ -30,8 +35,6 @@ export const getChatMessages = async (req, res) => {
 
     // Respond with the list of messages in JSON format
     res.status(200).json(messages);
-
-    // Log the messages in the console
     console.log('Chat messages:', messages);
   } catch (error) {
     // Log and respond with an error message in case of failure
@@ -44,7 +47,7 @@ export const sentMessage = async (req, res) => {
   const { sender, receiver, message } = req.body;
   try {
     // Create a new message instance
-    const newMessage = new Message({ senderId: sender, receiverId: receiver, text:message });
+    const newMessage = new Message({ senderId: sender, receiverId: receiver, text: message });
 
     // Save the new message to the database
     await newMessage.save();
@@ -62,6 +65,4 @@ export const sentMessage = async (req, res) => {
     console.error('Send message error:', error);
     res.status(500).json({ message: 'Internal server error' });
   }
-}
-
-
+};
