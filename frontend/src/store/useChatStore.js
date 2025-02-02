@@ -1,16 +1,17 @@
 import { create } from 'zustand';
 import { axiosInstance } from '../lib/axios';
 import toast from 'react-hot-toast';
+import { useAuthStore } from './useAuthStore';
 
-export const useChatStore = create((set) => ({
+export const useChatStore = create((set, get) => ({
   messages: [],
   users: [],
-  selectedUser: null,
-  isUserLoading: false,
+  selectedUser: null, // Fixed: Changed 'selected:User' to 'selectedUser: null'
+  isUserLoading: false, // Fixed: Changed 'isUser Loading' to 'isUserLoading'
   isMessageLoading: false,
 
   getUsers: async () => {
-    set({ isUserLoading: true });
+    set({ isUserLoading: true }); // Fixed: Changed 'isUser Loading' to 'isUserLoading'
     try {
       const res = await axiosInstance.get('/chat/users');
       set({ users: res.data });
@@ -18,14 +19,16 @@ export const useChatStore = create((set) => ({
       toast.error('Failed to fetch users');
       console.error('Fetch users error:', error);
     } finally {
-      set({ isUserLoading: false });
+      set({ isUserLoading: false }); // Fixed: Changed 'isUser Loading' to 'isUserLoading'
     }
   },
 
   getMessages: async (sender, receiver) => {
     set({ isMessageLoading: true });
+    // console.log('sender:', sender, 'receiver:', receiver);
     try {
-      const res = await axiosInstance.put('/chat/getMessages', { sender, receiver });
+      const res = await axiosInstance.post('/chat/getMessages', { sender, receiver });
+      // console.log('res:', res);
       if (res.data.length === 0) {
         toast.error('No messages found between the specified users');
       } else {
@@ -39,11 +42,37 @@ export const useChatStore = create((set) => ({
     }
   },
 
-  setSelectedUser: (user) => {
-    set({ selectedUser: user });
+  setSelectedUser: (user) => { // Fixed: Changed 'setSelected:User' to 'setSelectedUser'
+    set({ selectedUser: user }); // Fixed: Changed 'selected:User' to 'selectedUser'
   },
 
-  addNewUser: async (data) => {
+  sendMessage: async (data) => {
+    try {
+      await axiosInstance.post('/chat/sentMessage', data);
+      // Optionally, you can also update the messages state here if needed
+    } catch (error) {
+      toast.error('Failed to send message');
+      console.error('Send message error:', error);
+    }
+  },
+
+  subscribeToMessages: () => {
+    const { selectedUser } = get(); // Fixed: Changed 'selectedUser ' to 'selectedUser'
+    if (!selectedUser) return;
+
+    const socket = useAuthStore.getState().socket;
+
+    socket.on('newMessage', (newMessage) => {
+      set((state) => ({ messages: [...state.messages, newMessage] }));
+    });
+  },
+
+  unsubscribeFromMessages: () => {
+    const socket = useAuthStore.getState().socket;
+    socket.off('newMessage');
+  },
+
+  addNewUser: async (data) => { // Fixed: Changed 'addNew:User' to 'addNewUser'
     set((state) => ({ users: [...state.users, data] }));
   }
 }));

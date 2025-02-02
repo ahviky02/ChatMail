@@ -2,13 +2,12 @@ import { useAuthStore } from "../store/useAuthStore";
 import { useChatStore } from "../store/useChatStore";
 
 const UsersElements = ({ users }) => {
-  const { setSelectedUser, getMessages,isMessageLoading} = useChatStore();
+  const { setSelectedUser, getMessages } = useChatStore();
   const { authUser } = useAuthStore();
   
   const handleUserSelect = (user) => {
     setSelectedUser(user);
-    getMessages (user.email,authUser.email);
-    
+    getMessages(authUser._id, user._id); // Use user ID instead of email for consistency
   };
 
   return (
