@@ -38,7 +38,6 @@ export const useChatStore = create((set, get) => ({
 
   getMessages: async (sender, receiver) => {
     set({ isMessageLoading: true });
-    console.log('sender:', sender, 'receiver:', receiver);
     try {
       const res = await axiosInstance.post('/chat/getMessages', { sender, receiver });
       // console.log('res:', res);
