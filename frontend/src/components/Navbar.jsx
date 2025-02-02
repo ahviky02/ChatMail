@@ -1,9 +1,14 @@
 import { MessageSquare, Settings, LogOut, User } from "lucide-react"; // Ensure these are imported
-import { Link } from "react-router-dom"; // Import Link from react-router-dom
+import { Link, useNavigate  } from "react-router-dom"; // Import Link from react-router-dom
 import { useAuthStore } from "../store/useAuthStore";
+import Profile from "../pages/Profile";
 
 const Navbar = () => {
     const { logout, authUser  } = useAuthStore();
+    const navigate = useNavigate();
+    const handleProfile = () =>{
+        navigate("/profile");
+    }
 
     return (
         <header className="bg-base-100 border-b border-base-300 fixed w-full top-0 z-40 backdrop-blur-lg bg-base-100/80 bg-primary/40">
@@ -28,7 +33,7 @@ const Navbar = () => {
                             <span className="hidden sm:inline">Setting</span>
                         </button>
 
-                        <button className="flex gap-2 items-center" aria-label="Profile">
+                        <button className="flex gap-2 items-center" aria-label="Profile" onClick={handleProfile}>
                          <User className="size-4  flex items-center justify-center" />
                          <span className="hidden sm:inline">Profile</span>
 

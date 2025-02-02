@@ -31,7 +31,7 @@ const UsersElements = ({ users }) => {
               )}
             </div>
             <div className="ml-2">
-              <p className="text-white">{user.name}</p>
+              <p className="text-white">{user._id == authUser._id ? "You" : user.name}</p>
               <p className="text-gray-400 text-xs">{onlineUsers.includes(user._id) ? 'Online' : 'Offline'}</p>
             </div>
           </div>

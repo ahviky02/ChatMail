@@ -8,8 +8,8 @@ export default {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#4a148c', // Default primary color
-          background: '#4a148c', // Background color
+          DEFAULT: '#gray', // Default primary color
+          background: 'gray', // Background color
           text: '#ffffff', // Text color
         },
         secondary: {
