@@ -12,7 +12,7 @@ const UsersElements = ({ users }) => {
   };
 
   return (
-    <div>
+    <div className="min-w-full">
       {users.length ? (
         users.map((user) => (
           <div

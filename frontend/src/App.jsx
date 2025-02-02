@@ -7,6 +7,7 @@ import Home from './pages/Home';
 import { useAuthStore } from './store/useAuthStore';
 import { Loader } from 'lucide-react';
 import Layout from './components/Layout';
+import Profile from './pages/Profile.jsx';
 
 function App() {
   const { authUser, checkAuth, isCheckingAuth,onlineUsers } = useAuthStore();
@@ -36,6 +37,7 @@ function App() {
                 <Routes>
                   <Route path="/" element={<Home />} />
                   <Route path="/chat" element={<Chat />} />
+                  <Route path="/profile" element={<Profile user={authUser} />} />
                 </Routes>
               </Layout>
             } 

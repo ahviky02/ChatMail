@@ -14,7 +14,7 @@ const Chat = () => {
 
 
   return (
-    <div className="h-[calc(100vh-3rem)] fixed bg-primary/80 w-full mt-12">
+    <div className="h-[calc(100vh-3rem)] bg-primary/80 w-screen mt-12">
       <div className="flex h-full">
         {/* Sidebar Menu */}
         <div className="w-40 bg-slate-500 h-full fixed">
@@ -23,7 +23,7 @@ const Chat = () => {
         {/* Main Content Area */}
         <div className="flex-1 bg-slate-900 h-full flex ml-40">
           {/* Left column for additional content */}
-          <div className="h-full w-1/4 bg-gray-700 text-white p-4 overflow-y-auto">
+          <div className="h-full w-1/4  bg-gray-700 text-white p-4 overflow-y-auto">
             <div className="flex flex-col h-full">
               <input 
                 type="search" 
@@ -31,11 +31,12 @@ const Chat = () => {
                 onChange={(e) => seachUsers(e.target.value)}
                 placeholder="Search Users" 
               />
-              <div className="flex-1 overflow-y-auto">
+              <div className="flex-1  overflow-y-auto">
                 <UsersElements users={users} />
               </div>
             </div>
           </div>
+
           {/* Right column for chat content */}
           <div className="flex-1 bg-gray-800 p-4 h-full">
             {
