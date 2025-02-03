@@ -1,10 +1,14 @@
 import Navbar from './Navbar';
+import Menu from './Menu';
 
 const Layout = ({ children }) => {
   return (
-    <div>
+    <div className=''>
       <Navbar />
-      <main className='fixed'>{children}</main>
+      <main className="bg-primary/80 w-screen fixed">
+          <Menu />
+        {children}
+      </main>
     </div>
   );
 };

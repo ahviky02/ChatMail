@@ -1,6 +1,6 @@
 import { useAuthStore } from "../store/useAuthStore";
 import { useMailStore } from "../store/useMailStore";
-import mailpic from '../assets/mail.png';
+import mailpic from '../assets/user.png';
 
 const MailElements = ({ mails }) => {
   const { authUser, onlineUsers } = useAuthStore();

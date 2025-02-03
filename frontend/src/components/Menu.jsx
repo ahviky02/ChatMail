@@ -1,28 +1,42 @@
 import React from 'react';
-import { SendHorizontal,Send,Mail,MessagesSquare } from 'lucide-react';
+import { SendHorizontal, Send, Mail, MessagesSquare } from 'lucide-react';
+import { useNavigate } from "react-router-dom";
 
 const Menu = () => {
-    return (
-        <div className="left-0 top-0 p-4">
-            <button className="flex gap-2 items-center mt-4" aria-label="Profile">
-                <SendHorizontal className="size-5  flex items-center justify-center" />
-                <span className="hidden sm:inline">Compose</span>
-            </button>
-            <button className="flex gap-2 items-center mt-4" aria-label="Profile">
-                <Send className="size-5  flex items-center justify-center" />
-                <span className="hidden sm:inline">Sent</span>
-            </button>
-            <button className="flex gap-2 items-center mt-4" aria-label="Profile">
-                <Mail className="size-5  flex items-center justify-center" />
-                <span className="hidden sm:inline">Inbox</span>
-            </button>
-            <button className="flex gap-2 items-center mt-4" aria-label="Profile">
-                <MessagesSquare className="size-5  flex items-center justify-center" />
-                <span className="hidden sm:inline">Quick Talk</span>
-            </button>
-          
-        </div>
-    );
+  const navigate = useNavigate();
+
+  const handleButton = (value) => {
+    if (value === 'compose') {
+      navigate('/compose');
+    } else if (value === 'inbox') {
+      navigate('/inbox');
+    } else if (value === 'sent') {
+      navigate('/sent');
+    } else if (value === 'chat') {
+      navigate('/chat');
+    }
+  };
+
+  return (
+    <div className="p-4 flex justify-around bg-gray-800 mt-12 h-11">
+      <button className="flex items-center gap-2" onClick={() => handleButton('compose')} aria-label="Compose">
+        <SendHorizontal className="w-5 h-5" />
+        <span>Compose</span>
+      </button>
+      <button className="flex items-center gap-2" onClick={() => handleButton('sent')} aria-label="Sent">
+        <Send className="w-5 h-5" />
+        <span>Sent</span>
+      </button>
+      <button className="flex items-center gap-2" onClick={() => handleButton('inbox')} aria-label="Inbox">
+        <Mail className="w-5 h-5" />
+        <span>Inbox</span>
+      </button>
+      <button className="flex items-center gap-2" onClick={() => handleButton('chat')} aria-label="Quick Talk">
+        <MessagesSquare className="w-5 h-5" />
+        <span>Quick Talk</span>
+      </button>
+    </div>
+  );
 };
 
 export default Menu;

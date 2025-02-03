@@ -2,7 +2,7 @@ import userpic from '../assets/user.png';
 
 const Profile = ({ user }) => {
   return (
-    <div className="min-h-[calc(100vh-3rem)] bg-gray-900 mt-12 pt-10 overflow-auto w-screen mx-auto">
+    <div className="min-h-[calc(100vh-3rem)] bg-gray-900 pt-10 overflow-auto w-screen mx-auto">
       <header className="flex flex-col items-center mb-4">
         <img 
           src={user.profilePic || userpic} 
