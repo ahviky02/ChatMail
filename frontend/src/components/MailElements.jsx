@@ -4,6 +4,8 @@ import mailpic from '../assets/user.png';
 
 const MailElements = ({ mails }) => {
   const { authUser, onlineUsers } = useAuthStore();
+  const {getMailUsers,mailsUsers} = useMailStore();
+  
   
   const handlemailSelect = (mail) => {
  // Use mail ID instead of email for consistency
@@ -11,8 +13,8 @@ const MailElements = ({ mails }) => {
 
   return (
     <div className="min-w-full">
-      {mails.length ? (
-        mails.map((mail) => (
+      {mailsUsers.length ? (
+        mailsUsers.map((mail) => (
           <div
             key={mail._id} // Ensure this is a unique identifier for each mail
             onClick={() => handlemailSelect(mail)}

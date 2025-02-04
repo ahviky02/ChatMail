@@ -5,6 +5,7 @@ import Signup from './Auth/sign-up';
 import Chat from './pages/Chat.jsx';
 import Home from './pages/Home';
 import Sent from './pages/Sent';
+import Compose from './pages/Compose';
 import { useAuthStore } from './store/useAuthStore';
 import { Loader } from 'lucide-react';
 import Layout from './components/Layout';
@@ -39,6 +40,7 @@ function App() {
                   <Route path="/" element={<Home />} />
                   <Route path="/chat" element={<Chat />} />
                   <Route path="/sent" element={<Sent />} />
+                  <Route path="/compose" element={<Compose />} />
                   <Route path="/profile" element={<Profile user={authUser} />} />
                 </Routes>
               </Layout>

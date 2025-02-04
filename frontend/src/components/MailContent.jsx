@@ -5,3 +5,5 @@ const Mail = ({mail}) => {
         </div>
     )
 }
+
+export default Mail;
