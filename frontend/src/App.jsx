@@ -10,6 +10,7 @@ import { useAuthStore } from './store/useAuthStore';
 import { Loader } from 'lucide-react';
 import Layout from './components/Layout';
 import Profile from './pages/Profile.jsx';
+import Inbox from './pages/Inbox.jsx';
 
 function App() {
   const { authUser, checkAuth, isCheckingAuth,onlineUsers } = useAuthStore();
@@ -40,6 +41,7 @@ function App() {
                   <Route path="/" element={<Home />} />
                   <Route path="/chat" element={<Chat />} />
                   <Route path="/sent" element={<Sent />} />
+                  <Route path="/inbox" element={<Inbox />} />
                   <Route path="/compose" element={<Compose />} />
                   <Route path="/profile" element={<Profile user={authUser} />} />
                 </Routes>

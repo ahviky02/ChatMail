@@ -4,14 +4,27 @@ import { axiosInstance } from "../lib/axios";
 export const useMailStore = create((set,get) => ({
   sentContents: [],
   inboxContents: [],
-  sentList: null,
+  sentList: [],
   inboxList: [],
+  mailUsers: [],
   sentSelectMail: null,
   inboxSelectMail: null,
   isMailLoading: false,
   isContentLoading: false,
   isComposeLoading: false,
   isMailError: false,
+
+  getMailUsers: async () => {
+    set({ isMailLoading: true });
+    try {
+      const  data  = await axiosInstance.get(`/mail/users?id=${id}`);
+      console.log(data);
+    } catch (er) {
+      set({ isMailError: true });
+    } finally {
+      set({ isMailLoading: false });
+    }
+  },
 
   getSentList: async (from) => {
     set({ isContentLoading: true });
@@ -66,5 +79,13 @@ export const useMailStore = create((set,get) => ({
     } finally {
       set({ isComposeLoading: false });
     }
+  },
+
+  subscribeToMail: (socket) => {
+    socket.on('mail', (mail) => {
+      set({ inboxContents: mail });
+    });
   }
+
+
 }));

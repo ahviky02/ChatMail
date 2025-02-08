@@ -20,10 +20,11 @@ const userSocketMap = {
 io.on('connection', (socket) => {
   console.log('A user connected:', socket.id);
   const userId = socket.handshake.query.userId;
-  
+  const email = socket.handshake.query.email;
+
   if (userId) {
-    userSocketMap[userId] = socket.id;
-    io.emit("getOnlineUsers", Object.keys(userSocketMap));
+    userSocketMap[userId] = { socketId: socket.id, email };
+    io.emit("getOnlineUsers", userSocketMap);
   } else {
     console.warn('No userId provided in handshake query');
   }
@@ -31,7 +32,7 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     console.log('User disconnected:', socket.id);
     delete userSocketMap[userId];
-    io.emit("getOnlineUsers", Object.keys(userSocketMap));
+    io.emit("getOnlineUsers", userSocketMap);
   });
 });
 

@@ -1,3 +1,4 @@
+import React from 'react';
 import { useAuthStore } from "../store/useAuthStore";
 import { useChatStore } from "../store/useChatStore";
 import userpic from '../assets/user.png';
@@ -9,6 +10,10 @@ const UsersElements = ({ users }) => {
   const handleUserSelect = (user) => {
     setSelectedUser(user);
     getMessages(authUser._id, user._id); // Use user ID instead of email for consistency
+  };
+
+  const isUserOnline = (userId) => {
+    return onlineUsers.some(user => user.userId === userId);
   };
 
   return (
@@ -26,13 +31,13 @@ const UsersElements = ({ users }) => {
                 alt="avatar"
                 className="w-10 h-10 rounded-full"
               />
-              {onlineUsers.includes(user._id) && (
+              {isUserOnline(user._id) && (
                 <span className="absolute top-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-gray-800"></span>
               )}
             </div>
             <div className="ml-2">
-              <p className="text-white">{user._id == authUser._id ? "You" : user.name}</p>
-              <p className="text-gray-400 text-xs">{onlineUsers.includes(user._id) ? 'Online' : 'Offline'}</p>
+              <p className="text-white">{user._id === authUser._id ? "You" : user.name}</p>
+              <p className="text-gray-400 text-xs">{isUserOnline(user._id) ? 'Online' : 'Offline'}</p>
             </div>
           </div>
         ))

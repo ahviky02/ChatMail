@@ -10,9 +10,9 @@ const Sent = () => {
   const { authUser } = useAuthStore();
 
   useEffect(() => {
-    getSentList(authUser.email);
+    getSentList(authUser._id);
     
-  },[getSentList,authUser.email])
+  },[getSentList,authUser._id])
 
 
   return (
@@ -30,7 +30,7 @@ const Sent = () => {
         {/* Right column for mail content */}
         <div className="flex-1 bg-gray-800 p-4 h-full">
           {sentSelectMail ? (
-            <MailContent user={sentSelectMail} />
+            <MailContent user={sentSelectMail} type ={'Sent'}/>
           ) : (
             <div className="text-white h-full flex flex-col justify-center items-center">
               <MessageSquareMore className="block m-2 w-20 h-20" />
