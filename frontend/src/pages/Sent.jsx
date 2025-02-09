@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { MessageSquareMore } from 'lucide-react';
 import { useMailStore } from '../store/useMailStore';
-import MailElements from '../components/MailElements';
-import MailContent from '../components/MailContent';
+import MailElements from '../components/sentElements';
+import MailContent from '../components/sentContents';
 import { useAuthStore } from '../store/useAuthStore';
 
 const Sent = () => {
@@ -10,9 +10,9 @@ const Sent = () => {
   const { authUser } = useAuthStore();
 
   useEffect(() => {
-    getSentList(authUser._id);
+    getSentList(authUser.email);
     
-  },[getSentList,authUser._id])
+  },[getSentList,authUser.email])
 
 
   return (

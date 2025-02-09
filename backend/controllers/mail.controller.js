@@ -45,7 +45,7 @@ export const getSendMails = async (req, res) => { // Renamed for consistency
 
 export const getReceiveMails = async (req, res) => {
   try {
-    const mails = await Mail.find({ to: req.user.to }); // Ensure req.user is correctly populated
+    const mails = await Mail.find({ to: req.query.to }); // Ensure req.user is correctly populated
     res.status(200).json(mails);
   } catch (err) {
     console.error('Get receive mails error:', err);
@@ -60,11 +60,6 @@ export const compose = async (req, res) => {
     // Find the sender and recipient user documents by their email addresses
     const sender = await User.findOne({ email: from });
     const recipient = await User.findOne({ email: to });
-
-    from = sender._id;
-    to = recipient._id;
-
-    console.log("From:", from, "To:", to);
 
     if (!sender || !recipient) {
       return res.status(400).json({ message: 'Sender or recipient not found' });

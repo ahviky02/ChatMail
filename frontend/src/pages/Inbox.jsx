@@ -1,18 +1,18 @@
 import React, { useEffect } from 'react';
 import { MessageSquareMore } from 'lucide-react';
 import { useMailStore } from '../store/useMailStore';
-import MailElements from '../components/MailElements';
-import MailContent from '../components/MailContent';
+import MailElements from '../components/inboxElements';
+import MailContent from '../components/inboxContents';
 import { useAuthStore } from '../store/useAuthStore';
 
-const Inbox = () => {
+const Sent = () => {
   const { inboxList, getInboxList, inboxSelectMail } = useMailStore();
   const { authUser } = useAuthStore();
 
   useEffect(() => {
-    getInboxList(authUser._id);
+    getInboxList(authUser.email);
     
-  },[getInboxList,authUser._id])
+  },[getInboxList,authUser.email])
 
 
   return (
@@ -30,7 +30,7 @@ const Inbox = () => {
         {/* Right column for mail content */}
         <div className="flex-1 bg-gray-800 p-4 h-full">
           {inboxSelectMail ? (
-            <MailContent user={inboxSelectMail} type="inbox"/>
+            <MailContent user={inboxSelectMail} type ={'Sent'}/>
           ) : (
             <div className="text-white h-full flex flex-col justify-center items-center">
               <MessageSquareMore className="block m-2 w-20 h-20" />
@@ -43,4 +43,4 @@ const Inbox = () => {
   );
 };
 
-export default Inbox;
+export default Sent;

@@ -2,12 +2,12 @@ import mongoose from "mongoose";
 
 const mailSchema = mongoose.Schema({
   to: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     ref: "User",
     required: true
   },
   from: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     ref: "User",
     required: true
   },

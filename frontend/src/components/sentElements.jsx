@@ -7,19 +7,22 @@ import { axiosInstance } from '../lib/axios';
 const MailElements = ({ mails, type }) => {
   const { authUser, onlineUsers } = useAuthStore();
   const { setSentSelectedMails, setInboxSelectedMails } = useMailStore();
+  // setSentSelectedMails('');
 
 
   const handleMailSelect = (mail) => {
     if (type = "sent") {
       setSentSelectedMails(mail);
+      console.log("sent");
     } else {
       setInboxSelectedMails(mail);
+      console.log("inbox");
 
     }
   };
 
   const isUserOnline = (userId) => {
-    return onlineUsers.some(user => user.userId === userId);
+    return onlineUsers.some(user => user.email === userId);
   };
 
   return (
@@ -42,7 +45,7 @@ const MailElements = ({ mails, type }) => {
               )}
             </div>
             <div className="ml-2">
-              <p className="text-white">{mail.to === authUser._id ? "You" : onlineUsers.find(user => user.userId === mail.to)?.email || 'Loading...'}</p>
+              <p className="text-white">{mail.to === authUser.email ? "You" : mail.to || 'Loading...'}</p>
               <p className="text-gray-400 text-xs">{isUserOnline(mail.to) ? 'Online' : 'Offline'}</p>
             </div>
           </div>
