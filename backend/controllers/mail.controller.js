@@ -33,6 +33,17 @@ export const getReceiveMails = async (req, res) => {
   }
 };
 
+export const setMailStatus = async (req, res) => {
+  try {
+    const { id } = req.body;
+    const mail = await Mail.findByIdAndUpdate(id, { mailStatus: 'read'});
+    res.status(200).json(mail);
+  } catch (err) {
+    console.error('Set mail status error:', err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
 export const compose = async (req, res) => {
   try {
     const { from, to, subject, mailContent } = req.body;

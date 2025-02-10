@@ -1,5 +1,5 @@
 import express from "express";
-import { getMailUsers, getReceiveMails, getSendMails, compose } from "../controllers/mail.controller.js";
+import { getMailUsers, getReceiveMails, getSendMails, compose, setMailStatus } from "../controllers/mail.controller.js";
 
 const router = express.Router();
 
@@ -7,6 +7,7 @@ const router = express.Router();
 router.get("/users", getMailUsers);
 router.get("/sent", getSendMails);
 router.get("/inbox", getReceiveMails);
+router.put("/status", setMailStatus);
 router.post("/compose", compose);
 
 // Handle non-existing endpoints
