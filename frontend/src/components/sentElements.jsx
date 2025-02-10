@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useAuthStore } from "../store/useAuthStore";
 import { useMailStore } from "../store/useMailStore";
 import mailpic from '../assets/user.png';
+import { format } from 'date-fns';
 import { axiosInstance } from '../lib/axios';
 
 const MailElements = ({ mails, type }) => {
@@ -46,8 +47,8 @@ const MailElements = ({ mails, type }) => {
             </div>
             <div className="ml-2">
               <p className="text-white">{mail.to === authUser.email ? "You" : mail.to || 'Loading...'}</p>
-              <p className="text-gray-400 text-xs">{isUserOnline(mail.to) ? 'Online' : 'Offline'}</p>
-            </div>
+              <p className="text-gray-400 text-s">{mail.subject} </p>
+              <p className='block text-xs font-thin ab'> {format(mail.updatedAt, "dd/MM/yyyy hh:mm a")}</p>            </div>
           </div>
         ))
       ) : (

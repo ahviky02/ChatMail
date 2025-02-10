@@ -3,15 +3,18 @@ import { useAuthStore } from "../store/useAuthStore";
 import { useMailStore } from "../store/useMailStore";
 import mailpic from '../assets/user.png';
 import { axiosInstance } from '../lib/axios';
+import { format } from 'date-fns';
+
 
 const MailElements = ({ mails}) => {
   const { authUser, onlineUsers } = useAuthStore();
-  const { setInboxSelectedMails } = useMailStore();
+  const { setInboxSelectedMails,setMailStatus } = useMailStore();
   // setSentSelectedMails('');
 
 
   const handleMailSelect = (mail) => {
       setInboxSelectedMails(mail);
+      setMailStatus(mail);
   };
 
   const isUserOnline = (userId) => {
@@ -39,7 +42,8 @@ const MailElements = ({ mails}) => {
             </div>
             <div className="ml-2">
               <p className="text-white">{mail.from === authUser.email ? "You" : mail.from || 'Loading...'}</p>
-              <p className="text-gray-400 text-xs">{isUserOnline(mail.from) ? 'Online' : 'Offline'}</p>
+              <p className="text-gray-400 text-s">{mail.subject} </p>
+              <p className='block text-xs font-thin ab'> {format(mail.updatedAt,"dd/MM/yyyy hh:mm a")}</p>
             </div>
           </div>
         ))

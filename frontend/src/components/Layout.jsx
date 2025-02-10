@@ -1,6 +1,7 @@
 import Navbar from './Navbar';
 import Menu from './Menu';
 
+
 const Layout = ({ children }) => {
   return (
     <div className=''>

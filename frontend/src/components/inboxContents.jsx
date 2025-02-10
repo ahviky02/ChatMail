@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useMailStore } from "../store/useMailStore";
 import mailpic from '../assets/user.png';
+import { format } from 'date-fns';
 
 
 const Mail = ({ user }) => {
@@ -18,7 +19,7 @@ const Mail = ({ user }) => {
               <p className="text-gray-400">{user.subject}</p>
             </div>
             <div className="flex-1 text-right">
-              <p>{Date(user.updatedAt)}</p>
+              <p>{format(user.updatedAt,'dd/MM/yyyy hh:mm a')}</p>
               <p className="text-green-500">{user.mailStatus}</p>
             </div>
           </div>

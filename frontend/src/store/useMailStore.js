@@ -95,6 +95,24 @@ export const useMailStore = create((set, get) => ({
     });
   },
 
+  setMailStatus: async (mail) => {
+    const id = mail._id;
+    const status = mail.mailStatus;
+    try{
+      const response = await axiosInstance.put('/mail/status', { id, status });
+    }
+    catch (error) {
+      console.error('Failed to update mail status:', error);
+    }
+    // try {
+    //   const response = await axiosInstance.post('/mail/status', mail);
+    //   toast.success('Mail status updated successfully');
+    // } catch (error) {
+    //   console.error('Failed to update mail status:', error);
+    //   toast.error('Failed to update mail status');
+    // }
+  },
+
   unsubscribeToMail: () => {
     const socket = useAuthStore.getState().socket;
     socket.off('newMail');
