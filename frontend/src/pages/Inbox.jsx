@@ -5,15 +5,24 @@ import MailElements from '../components/inboxElements';
 import MailContent from '../components/inboxContents';
 import { useAuthStore } from '../store/useAuthStore';
 
-const Sent = () => {
-  const { inboxList, getInboxList, inboxSelectMail } = useMailStore();
+const Inbox = () => {
+  const { inboxList, getInboxList, inboxSelectMail, subscribeToMail, unsubscribeToMail } = useMailStore(); // Fixed: Changed 'unSubscribeToMail' to 'unsubscribeToMail'
   const { authUser } = useAuthStore();
 
   useEffect(() => {
-    getInboxList(authUser.email);
-    
-  },[getInboxList,authUser.email])
+    if (authUser) {
+      getInboxList(authUser.email);
+      subscribeToMail();
 
+      return () => {
+        unsubscribeToMail(); // Fixed: Changed 'unSubscribeToMail' to 'unsubscribeToMail'
+      };
+    }
+  }, [authUser, getInboxList, subscribeToMail, unsubscribeToMail]); // Fixed: Added 'authUser' to dependency array
+
+  useEffect(() => {
+    getInboxList(authUser.email);
+  }, [getInboxList, authUser.email]);
 
   return (
     <div className="h-[calc(100vh-92px)] bg-primary/80">
@@ -30,7 +39,7 @@ const Sent = () => {
         {/* Right column for mail content */}
         <div className="flex-1 bg-gray-800 p-4 h-full">
           {inboxSelectMail ? (
-            <MailContent user={inboxSelectMail} type ={'Sent'}/>
+            <MailContent user={inboxSelectMail} type="Sent" />
           ) : (
             <div className="text-white h-full flex flex-col justify-center items-center">
               <MessageSquareMore className="block m-2 w-20 h-20" />
@@ -43,4 +52,4 @@ const Sent = () => {
   );
 };
 
-export default Sent;
+export default Inbox;

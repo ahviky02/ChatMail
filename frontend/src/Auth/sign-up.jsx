@@ -3,6 +3,8 @@ import userImage from '../assets/user.png';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/useAuthStore';
+import toast from 'react-hot-toast';
+
 export default function SignUp() {
   const [formData, setFormData] = useState({
     name: '',
@@ -15,10 +17,8 @@ export default function SignUp() {
     image: null,
   });
 
-  const {signup} = useAuthStore();
-
+  const {signup,isSignUp} = useAuthStore();
   const navigate = useNavigate();
-
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -35,13 +35,17 @@ export default function SignUp() {
     for (const key in formData) {
       data.append(key, formData[key]);
     }
-    signup(formData);
+    await signup(formData);
+    if(isSignUp){
+      toast.success("Signup successful");
+      setInterval(navigate('/login'), 2000);
+    }
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <form className="bg-white p-8 rounded-lg shadow-md w-full max-w-2xl" onSubmit={handleSubmit}>
-        <h1 className="text-2xl font-bold text-center text-primary">Sign Up</h1>
+        <h1 className="text-2xl font-bold text-center">Sign Up</h1>
 
         <div className="flex justify-center mb-4">
           <img
@@ -54,55 +58,55 @@ export default function SignUp() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700">Name</label>
+            <label className="block text-sm font-medium">Name</label>
             <input
               type="text"
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-primary"
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring"
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">Email Address</label>
+            <label className="block text-sm font-medium">Email Address</label>
             <input
               type="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-primary"
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring"
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">Mobile Number</label>
+            <label className="block text-sm font-medium">Mobile Number</label>
             <input
               type="tel"
               name="phone"
               value={formData.phone}
               onChange={handleChange}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-primary"
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring"
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">Date Of Birth</label>
+            <label className="block text-sm font-medium">Date Of Birth</label>
             <input
               type="date"
               name="dob"
               value={formData.dob}
               onChange={handleChange}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-primary"
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring"
               required
             />
           </div>
 
           <div className="col-span-2">
-            <label className="block text-sm font-medium text-gray-700">Gender</label>
+            <label className="block text-sm font-medium">Gender</label>
             <div className="flex items-center">
               <label className="mr-4">
                 <input
@@ -130,47 +134,47 @@ export default function SignUp() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">Upload Image</label>
+            <label className="block text-sm font-medium">Upload Image</label>
             <input
               type="file"
-              name="image" // Changed from profilePic to image to match state
+              name="image" 
               onChange={handleChange}
               accept='image/*'
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-primary"
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">Password</label>
+            <label className="block text-sm font-medium">Password</label>
             <input
               type="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-primary"
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring"
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">Confirm Password</label>
+            <label className="block text-sm font-medium">Confirm Password</label>
             <input
               type="password"
               name="password_confirmation"
               value={formData.password_confirmation}
               onChange={handleChange}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-primary"
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring"
               required
             />
           </div>
         </div>
 
         <div className="flex justify-center mt-4">
-          <button type="submit" className="w-full py-2 text-white bg-primary rounded-md hover:bg-primary-dark focus:outline-none">
+          <button type="submit" className="w-full py-2 text-white bg-gray-700 rounded-md hover:bg-gray-800 focus:outline-none">
             Register
           </button>
         </div>
-        <h6 className='mt-3 text-center'>Already have an account? <a href='/signin' className='text-primary font-bold'>Sign in</a></h6>
+        <h6 className='mt-3 text-center'>Already have an account? <a href='/signin' className='font-bold text-gray-700'>Sign in</a></h6>
       </form>
     </div>
   );

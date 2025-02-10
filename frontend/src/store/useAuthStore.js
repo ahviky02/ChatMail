@@ -3,12 +3,14 @@ import { axiosInstance } from '../lib/axios';
 import toast, { Toaster } from 'react-hot-toast';
 import io from 'socket.io-client';
 
-const BASE_URL = import.meta.env.MODE=== "development"?'http://localhost:8001':'/';
+const BASE_URL = import.meta.env.MODE === "development" ? 'http://localhost:8001' : '/';
 
 export const useAuthStore = create((set, get) => ({
   authUser: null,
   isSigningUp: false,
   isLoggingIn: false,
+  isLogin: false,
+  isSignUp:false,
   isUpdatingProfile: false,
   isCheckingAuth: true,
   onlineUsers: [],
@@ -35,6 +37,7 @@ export const useAuthStore = create((set, get) => ({
       set({ authUser: res.data });
       toast.success("Signup successful");
       get().connectSocket();
+      set({isSignUp:true});
     } catch (error) {
       toast.error("Signup failed");
     } finally {
@@ -49,6 +52,8 @@ export const useAuthStore = create((set, get) => ({
       set({ authUser: res.data.user });
       toast.success("Login successful");
       get().connectSocket();
+      set({ isLogin: true });
+
     } catch (error) {
       toast.error("Login failed");
     } finally {
@@ -83,17 +88,17 @@ export const useAuthStore = create((set, get) => ({
   connectSocket: () => {
     const { authUser, setOnlineUsers } = get();
     if (!authUser || (get().socket && get().socket.connected)) return;
-  
+
     const socket = io(BASE_URL, {
       query: {
         userId: authUser._id,
         email: authUser.email,
       },
     });
-  
+
     socket.connect();
     set({ socket });
-  
+
     socket.on("getOnlineUsers", (userSocketMap) => {
       console.log("Socket connected");
       const onlineUsers = Object.keys(userSocketMap).map((userId) => ({
@@ -102,7 +107,7 @@ export const useAuthStore = create((set, get) => ({
       }));
       set({ onlineUsers });
     });
-  
+
     socket.on("disconnect", () => {
       console.log("Socket disconnected");
     });

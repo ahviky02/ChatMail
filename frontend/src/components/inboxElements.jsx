@@ -38,8 +38,8 @@ const MailElements = ({ mails}) => {
               )}
             </div>
             <div className="ml-2">
-              <p className="text-white">{mail.from === authUser.email ? "You" : mail.to || 'Loading...'}</p>
-              <p className="text-gray-400 text-xs">{isUserOnline(mail.to) ? 'Online' : 'Offline'}</p>
+              <p className="text-white">{mail.from === authUser.email ? "You" : mail.from || 'Loading...'}</p>
+              <p className="text-gray-400 text-xs">{isUserOnline(mail.from) ? 'Online' : 'Offline'}</p>
             </div>
           </div>
         ))

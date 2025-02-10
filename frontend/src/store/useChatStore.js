@@ -23,7 +23,7 @@ export const useChatStore = create((set, get) => ({
     }
   },
 
-  seachUsers: async (search) => {
+  searchUsers: async (search) => { // Fixed: Changed 'seachUsers' to 'searchUsers'
     set({ isUserLoading: true }); // Fixed: Changed 'isUser Loading' to 'isUserLoading'
     try {
       const res = await axiosInstance.get(`/chat/users?search=${search}`);
@@ -40,7 +40,6 @@ export const useChatStore = create((set, get) => ({
     set({ isMessageLoading: true });
     try {
       const res = await axiosInstance.post('/chat/getMessages', { sender, receiver });
-      // console.log('res:', res);
       if (res.data.length === 0) {
         toast.error('No messages found between the specified users');
       } else {
@@ -65,7 +64,6 @@ export const useChatStore = create((set, get) => ({
       set((state) => ({
         messages: [...state.messages, { text: data.message, senderId: data.sender }]
       }));
-      // Optionally, you can also update the messages state here if needed
     } catch (error) {
       toast.error('Failed to send message');
       console.error('Send message error:', error);
@@ -73,7 +71,7 @@ export const useChatStore = create((set, get) => ({
   },
 
   subscribeToMessages: () => {
-    const { selectedUser } = get(); // Fixed: Changed 'selectedUser ' to 'selectedUser'
+    const { selectedUser } = get();
     if (!selectedUser) return;
 
     const socket = useAuthStore.getState().socket;

@@ -1,7 +1,10 @@
 import { create } from 'zustand';
 import { axiosInstance } from "../lib/axios";
+import toast from 'react-hot-toast';
+import { useAuthStore } from './useAuthStore';
 
-export const useMailStore = create((set,get) => ({
+
+export const useMailStore = create((set, get) => ({
   sentContents: [],
   inboxContents: [],
   sentList: [],
@@ -17,8 +20,9 @@ export const useMailStore = create((set,get) => ({
   getMailUsers: async () => {
     set({ isMailLoading: true });
     try {
-      const  data  = await axiosInstance.get(`/mail/users?id=${id}`);
+      const { data } = await axiosInstance.get(`/mail/users?id=${id}`);
       console.log(data);
+      set({ mailUsers: data });
     } catch (er) {
       set({ isMailError: true });
     } finally {
@@ -31,7 +35,6 @@ export const useMailStore = create((set,get) => ({
     try {
       const { data } = await axiosInstance.get(`/mail/sent?from=${from}`);
       set({ sentList: data });
-      // console.log("Sent Mails:", get().sentList);
     } catch (error) {
       console.error('Error fetching sent mails:', error);
       set({ isMailError: true });
@@ -73,19 +76,27 @@ export const useMailStore = create((set,get) => ({
     set({ isComposeLoading: true });
     try {
       const response = await axiosInstance.post('/mail/compose', mail);
-      set({ sentContents: response.data });
+      set((state) => ({
+        sentContents: [...state.sentContents, response.data],
+      }));
+      toast.success('Mail sent successfully');
     } catch (error) {
       console.error('Failed to compose mail:', error);
+      toast.error('Failed to compose mail');
     } finally {
       set({ isComposeLoading: false });
     }
   },
 
-  subscribeToMail: (socket) => {
-    socket.on('mail', (mail) => {
-      set({ inboxContents: mail });
+  subscribeToMail: () => {
+    const socket = useAuthStore.getState().socket;
+    socket.on('newMail', (newMail) => {
+      set((state) => ({ inboxList: [...state.inboxList, newMail] }));
     });
+  },
+
+  unsubscribeToMail: () => {
+    const socket = useAuthStore.getState().socket;
+    socket.off('newMail');
   }
-
-
 }));

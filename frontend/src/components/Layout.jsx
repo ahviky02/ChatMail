@@ -5,9 +5,11 @@ const Layout = ({ children }) => {
   return (
     <div className=''>
       <Navbar />
-      <main className="bg-primary/80 w-screen fixed">
-          <Menu />
-        {children}
+      <main className="bg-primary/80 text-primary-text w-screen fixed">
+        <Menu />
+        <div className="content-container"> {/* Add a container for children elements */}
+          {children}
+        </div>
       </main>
     </div>
   );

@@ -1,26 +1,6 @@
 import Mail from '../models/mail.model.js';
 import User from '../models/user.model.js';
-
-// export const getMailUsers = async (req, res) => {
-//   const { search } = req.query;
-//   try {
-//     let users;
-//     if (search) {
-//       users = await User.find({
-//         $or: [
-//           { name: { $regex: search, $options: 'i' } }, // Search by name (case insensitive)
-//           { email: { $regex: search, $options: 'i' } }  // Search by email (case insensitive)
-//         ]
-//       });
-//     } else {
-//       users = await User.find({});
-//     }
-//     res.status(200).json(users);
-//   } catch (error) {
-//     console.error('Get mail users error:', error);
-//     res.status(500).json({ message: 'Internal server error' });
-//   }
-// };
+import { getMailSocketId, io } from '../lib/socket.js';
 
 export const getMailUsers = async (req, res) => {
   const { id } = req.query;
@@ -45,7 +25,7 @@ export const getSendMails = async (req, res) => { // Renamed for consistency
 
 export const getReceiveMails = async (req, res) => {
   try {
-    const mails = await Mail.find({ to: req.query.to }); // Ensure req.user is correctly populated
+    const mails = await Mail.find({ to: req.query.to });
     res.status(200).json(mails);
   } catch (err) {
     console.error('Get receive mails error:', err);
@@ -55,11 +35,12 @@ export const getReceiveMails = async (req, res) => {
 
 export const compose = async (req, res) => {
   try {
-    var { from, to, subject, mailContent } = req.body;
+    const { from, to, subject, mailContent } = req.body;
 
     // Find the sender and recipient user documents by their email addresses
     const sender = await User.findOne({ email: from });
     const recipient = await User.findOne({ email: to });
+
 
     if (!sender || !recipient) {
       return res.status(400).json({ message: 'Sender or recipient not found' });
@@ -69,11 +50,17 @@ export const compose = async (req, res) => {
       from,
       to,
       subject,
-      mailContent
+      mailContent,
     });
 
     await newMail.save();
-    res.status(201).json({ message: "Mail composed successfully!" });
+    res.status(201).json({ message: 'Mail composed successfully!' });
+
+    const mailSocketId = getMailSocketId(recipient._id); // Corrected variable name to follow camelCase
+    if (mailSocketId) {
+      io.to(mailSocketId).emit('newMail', newMail);
+    }
+
   } catch (err) {
     console.error('Compose mail error:', err);
     res.status(500).json({ message: 'Internal server error' });

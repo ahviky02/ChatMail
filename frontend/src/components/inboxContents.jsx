@@ -14,7 +14,7 @@ const Mail = ({ user }) => {
               className="w-20 h-20 rounded-full"
             />
             <div className="ml-4">
-              <h2 className="text-2xl font-bold">{user.to}</h2>
+              <h2 className="text-2xl font-bold">{user.from}</h2>
               <p className="text-gray-400">{user.subject}</p>
             </div>
             <div className="flex-1 text-right">
