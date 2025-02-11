@@ -12,7 +12,7 @@ const UserContent = ({ user }) => {
   useEffect(() => {
     if (authUser && user) {
       getMessages(authUser._id, user._id);
-      subscribeToMessages();
+      subscribeToMessages(authUser._id, user._id);
 
       return () => {
         unsubscribeFromMessages();
@@ -60,7 +60,9 @@ const UserContent = ({ user }) => {
         ) : messages.length > 0 ? (
           messages.map((msg, index) => (
             <div key={index} className={`my-1 ${msg.senderId === authUser._id ? 'text-right' : 'text-left'}`}>
-              <p className="p-2 bg-black rounded">{msg.text}<span className="font-thin block text-xs">{format(new Date(msg.createdAt), 'dd/MM/yyyy HH:mm')}</span></p>
+              <p className="p-2 bg-black rounded">{msg.text}
+                {/* <span className="font-thin block text-xs">{format(new Date(msg.createdAt), 'dd/MM/yyyy HH:mm')}</span> */}
+                </p>
               
             </div>
           ))
