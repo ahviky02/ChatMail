@@ -11,9 +11,10 @@ import { Loader } from 'lucide-react';
 import Layout from './components/Layout';
 import Profile from './pages/Profile.jsx';
 import Inbox from './pages/Inbox.jsx';
+import NotFound from './pages/NotFound.jsx'; // Import the NotFound component
 
 function App() {
-  const { authUser, checkAuth, isCheckingAuth,onlineUsers } = useAuthStore();
+  const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore();
 
   useEffect(() => {
     checkAuth();
@@ -44,12 +45,14 @@ function App() {
                   <Route path="/inbox" element={<Inbox />} />
                   <Route path="/compose" element={<Compose />} />
                   <Route path="/profile" element={<Profile user={authUser} />} />
+                  <Route path="*" element={<NotFound />} /> {/* Add NotFound route */}
                 </Routes>
               </Layout>
             } 
           />
         )}
         {!authUser && <Route path="/*" element={<Signin />} />}
+        <Route path="*" element={<NotFound />} /> {/* Add NotFound route for non-authenticated users */}
       </Routes>
     </Router>
   );
