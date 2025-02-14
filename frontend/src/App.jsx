@@ -5,6 +5,7 @@ import Signup from './Auth/sign-up';
 import Chat from './pages/Chat.jsx';
 import Home from './pages/Home';
 import Sent from './pages/Sent';
+import Video from './pages/VIdeo.jsx';
 import Compose from './pages/Compose';
 import { useAuthStore } from './store/useAuthStore';
 import { Loader } from 'lucide-react';
@@ -12,6 +13,7 @@ import Layout from './components/Layout';
 import Profile from './pages/Profile.jsx';
 import Inbox from './pages/Inbox.jsx';
 import NotFound from './pages/NotFound.jsx'; // Import the NotFound component
+import Calling from './pages/Calling.jsx';
 
 function App() {
   const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore();
@@ -44,6 +46,8 @@ function App() {
                   <Route path="/sent" element={<Sent />} />
                   <Route path="/inbox" element={<Inbox />} />
                   <Route path="/compose" element={<Compose />} />
+                  <Route path="/calling" element={<Calling />} />
+                  <Route path="/video-call" element={<Video />} />
                   <Route path="/profile" element={<Profile user={authUser} />} />
                   <Route path="*" element={<NotFound />} /> {/* Add NotFound route */}
                 </Routes>

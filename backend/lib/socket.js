@@ -12,7 +12,6 @@ const io = new Server(server, {
 });
 
 const userSocketMap = {};
-const mailSocketMap = {};
 
 io.on('connection', (socket) => {
   console.log('A user connected:', socket.id);
@@ -26,8 +25,46 @@ io.on('connection', (socket) => {
     console.warn('No userId provided in handshake query');
   }
 
+  // Handle video call initiation
+  socket.on('callUser ', ({ callerId, receiverId }) => {
+    const receiver = userSocketMap[receiverId];
+    if (receiver) {
+      socket.to(receiver.socketId).emit('callIncoming', { callerId });
+    } else {
+      socket.emit('userNotAvailable', { receiverId });
+    }
+  });
+
+  // Handle call acceptance
+  socket.on('acceptCall', ({ callerId, receiverId }) => {
+    const caller = userSocketMap[callerId];
+    if (caller) {
+      socket.to(caller.socketId).emit('callAccepted', { receiverId });
+    } else {
+      socket.emit('userNotAvailable', { callerId });
+    }
+  });
+
+  // Handle ICE candidates
+  socket.on('sendCandidate', ({ candidate, receiverId }) => {
+    const receiver = userSocketMap[receiverId];
+    if (receiver) {
+      socket.to(receiver.socketId).emit('receiveCandidate', { candidate });
+    }
+  });
+
+  // Handle call rejection
+  socket.on('rejectCall', ({ callerId }) => {
+    const caller = userSocketMap[callerId];
+    if (caller) {
+      socket.to(caller.socketId).emit('callRejected');
+    } else {
+      socket.emit('userNotAvailable', { callerId });
+    }
+  });
+
   socket.on('disconnect', () => {
-    console.log('User disconnected:', socket.id);
+    console.log('User  disconnected:', socket.id);
     const userId = Object.keys(userSocketMap).find(
       (key) => userSocketMap[key].socketId === socket.id
     );
