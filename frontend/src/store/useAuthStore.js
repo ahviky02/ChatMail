@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { axiosInstance } from '../lib/axios';
 import toast, { Toaster } from 'react-hot-toast';
 import io from 'socket.io-client';
+import axios from 'axios';
 
 const BASE_URL = import.meta.env.MODE === "development" ? 'http://localhost:8001' : '/';
 
@@ -75,7 +76,16 @@ export const useAuthStore = create((set, get) => ({
   updateProfile: async (data) => {
     set({ isUpdatingProfile: true });
     try {
-      const res = await axiosInstance.put("/auth/update", data);
+      const formData = new FormData();
+      formData.append('image', data.image); // Assuming data.image is the file
+      formData.append('id', data.id); // Assuming data.id is the user ID
+  
+      const res = await axiosInstance.put("/auth/update", formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        }
+      });
+  
       set({ authUser: res.data });
       toast.success("Profile updated");
     } catch (error) {
