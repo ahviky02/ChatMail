@@ -7,6 +7,8 @@ import mailRoutes from './routes/mail.routes.js'
 import connectToMongoDB from './lib/db.js';
 import cookieParser from 'cookie-parser';
 import {app,server} from './lib/socket.js';
+import fs from 'fs';
+import multer from 'multer';
 
 import path from 'path';
 
@@ -26,6 +28,30 @@ app.use(cors({
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+
+
+
+// // Route for handling file uploads
+// app.put('/api/auth/update', upload.single('image'), (req, res) => {
+//   if (!req.file) {
+//     return res.status(400).send('No file uploaded.');
+//   }
+
+//   // Here you can handle the file and user ID as needed
+//   const userId = req.body.id; // Assuming the user ID is sent in the request body
+//   const filePath = req.file.path; // Path to the uploaded file
+
+//   // You can now update the user's profile in your database with the file path
+//   // For example:
+//   // User.update({ _id: userId }, { profilePic: filePath })
+//   //   .then(() => res.status(200).send('Profile updated successfully.'))
+//   //   .catch(err => res.status(500).send('Error updating profile.'));
+
+//   res.status(200).send({
+//     message: 'Profile updated successfully.',
+//     filePath: filePath,
+//   });
+// });
 
 
 app.use("/api/auth", authRoutes);

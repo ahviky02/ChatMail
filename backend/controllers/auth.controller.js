@@ -2,6 +2,7 @@ import User from "../models/user.model.js";
 import bcrypt from "bcrypt";
 import generateTokenAndSetCookie from "../lib/utils.js";
 import cloudinary from "../lib/cloudinary.js";
+import multer from "multer";
 
 export const login = async (req, res) => {
   try {
@@ -80,28 +81,51 @@ export const signup = async (req, res) => {
   }
 };
 
-export const updateProfile = async (req, res) => {
-  try {
-    const { profilePic } = req.body;
-    const userId = req.user._id;
 
-    if (!profilePic) {
-      return res.status(400).json({ message: "Profile picture is required" });
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
+
+export const updateProfile = [
+  upload.single('image'),
+  async (req, res) => {
+    console.log("Update profile request received");
+    try {
+      const profilePic = req.file;
+      const userId = req.user._id;
+
+      if (!profilePic) {
+        return res.status(400).json({ message: "Profile picture is required" });
+      }
+
+      const uploadResponse = await cloudinary.uploader.upload_stream(
+        (error, result) => {
+          if (error) {
+            console.error("Cloudinary upload error:", error);
+            return res.status(500).json({ message: "Internal server error" });
+          }
+
+          User.findByIdAndUpdate(
+            userId,
+            { profilePic: result.secure_url },
+            { new: true }
+          )
+            .then(updatedUser => res.status(200).json(updatedUser))
+            .catch(error => {
+              console.error("Update profile error:", error);
+              res.status(500).json({ message: "Internal server error" });
+            });
+        }
+      );
+
+      uploadResponse.end(profilePic.buffer);
+    } catch (error) {
+      console.error("Update profile error:", error);
+      res.status(500).json({ message: "Internal server error" });
     }
-
-    const uploadResponse = await cloudinary.uploader.upload(profilePic);
-    const updatedUser = await User.findByIdAndUpdate(
-      userId,
-      { profilePic: uploadResponse.secure_url },
-      { new: true }
-    );
-
-    res.status(200).json(updatedUser);
-  } catch (error) {
-    console.error("Update profile error:", error);
-    res.status(500).json({ message: "Internal server error" });
   }
-};
+];
+
+
 
 export const checkAuth = async (req, res) => {
   try {
