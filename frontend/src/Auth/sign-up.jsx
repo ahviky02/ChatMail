@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect} from 'react';
 import userImage from '../assets/user.png';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -20,6 +20,12 @@ export default function SignUp() {
   const {signup,isSignUp} = useAuthStore();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if(isSignUp){
+      navigate('/profile');
+      }
+      },[isSignUp,navigate]);
+
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     setFormData({
@@ -28,18 +34,14 @@ export default function SignUp() {
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit =  (e) => {
     e.preventDefault();
 
     const data = new FormData();
     for (const key in formData) {
       data.append(key, formData[key]);
     }
-    await signup(formData);
-    if(isSignUp){
-      toast.success("Signup successful");
-      setInterval(navigate('/login'), 2000);
-    }
+    signup(formData);
   };
 
   return (

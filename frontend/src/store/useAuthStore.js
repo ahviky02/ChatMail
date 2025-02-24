@@ -34,7 +34,11 @@ export const useAuthStore = create((set, get) => ({
   signup: async (data) => {
     set({ isSigningUp: true });
     try {
-      const res = await axiosInstance.post("/auth/signup", data);
+      const res = await axiosInstance.post("/auth/signup", data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        }
+      });
       set({ authUser: res.data });
       toast.success("Signup successful");
       get().connectSocket();

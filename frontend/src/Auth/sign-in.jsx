@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { useAuthStore } from '../store/useAuthStore';
 import { useNavigate } from 'react-router-dom';
@@ -21,15 +21,15 @@ function SignIn() {
 
   const { login, isLogin } = useAuthStore();
 
+  useEffect(() => {
+    if (isLogin) {
+      navigate('/profile');
+    }
+  }, [isLogin, navigate]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await login(formData);
-    if (isLogin) {
-      toast.success('Login successful!');
-      navigate('/');
-    } else {
-      toast.error('Login failed. Please check your credentials and try again.');
-    }
+    login(formData);
   }
 
   return (
