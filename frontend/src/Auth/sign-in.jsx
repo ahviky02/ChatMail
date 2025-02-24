@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { useAuthStore } from '../store/useAuthStore';
 import { useNavigate } from 'react-router-dom';
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+
 
 function SignIn() {
   const [formData, setFormData] = useState({

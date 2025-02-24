@@ -3,11 +3,43 @@ import bcrypt from "bcrypt";
 import generateTokenAndSetCookie from "../lib/utils.js";
 import cloudinary from "../lib/cloudinary.js";
 import multer from "multer";
+import {OAuth2Client} from 'google-auth-library';
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+export const googleSignup = async (req, res) => {
+  const  token  = req.body.credential; // Extract token from req.body
+  
+  try {
+    // Verify the token with Google
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_CLIENT_ID, // Specify the CLIENT_ID of the app that accesses the backend
+    });
+    const { name, email, picture } = ticket.getPayload();
+    // console.log("google", ticket.getPayload());
+
+        // Check if the user already exists
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            // If user exists, generate token and set cookie
+            generateTokenAndSetCookie(existingUser._id, res);
+            return res.status(200).json({ message: "Login successful" });
+        }
+
+        // If user does not exist, create a new user
+        const user = await User.create({ name, email, profilePic: picture });
+        generateTokenAndSetCookie(user._id, res);
+        res.status(201).json({ message: "User registered successfully" });
+    } catch (error) {
+        console.error("Google signup error:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+};
 
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
-
 
 export const login = async (req, res) => {
   try {

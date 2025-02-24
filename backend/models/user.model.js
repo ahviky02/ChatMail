@@ -14,12 +14,11 @@ const userSchema = new mongoose.Schema(
     },
     dob: {
       type: Date,
-      required: true,
     },
     gender: {
       type: String,
       enum: ['male', 'female', 'Other'], // Enum for gender
-      required: true,
+      default: 'Other',
     },
     phone: {
       type: String,
@@ -28,7 +27,6 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: true,
     },
     profilePic: {
       type: String,

@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/useAuthStore';
 import toast from 'react-hot-toast';
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 
 export default function SignUp() {
   const [formData, setFormData] = useState({
@@ -17,8 +18,17 @@ export default function SignUp() {
     image: null,
   });
 
-  const {signup,isSignUp} = useAuthStore();
+  const {signup,isSignUp,googleSignup} = useAuthStore();
   const navigate = useNavigate();
+
+  const handleGoogleLoginSuccess = async (data) => {
+    googleSignup(data);
+  };
+
+  const handleGoogleLoginFailure = (error) => {
+    toast.error("Google login failed");
+    console.error(error);
+  };
 
   useEffect(() => {
     if(isSignUp){
@@ -45,6 +55,9 @@ export default function SignUp() {
   };
 
   return (
+    <GoogleOAuthProvider clientId="961266737010-ie3vmfl90p184mbl86p5ojb0udpn31d4.apps.googleusercontent.com">
+
+
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <form className="bg-white p-8 rounded-lg shadow-md w-full max-w-2xl" onSubmit={handleSubmit}>
         <h1 className="text-2xl font-bold text-center pb-3">Sign Up</h1>
@@ -177,7 +190,16 @@ export default function SignUp() {
           </button>
         </div>
         <h6 className='mt-3 text-center'>Already have an account? <a href='/signin' className='font-bold text-gray-700'>Sign in</a></h6>
+
+        <div className="flex justify-center mt-4">
+            <GoogleLogin
+              onSuccess={handleGoogleLoginSuccess}
+              onFailure={handleGoogleLoginFailure}
+              buttonText="Signup with Google"
+            />
+          </div>
       </form>
     </div>
+    </GoogleOAuthProvider>
   );
 }
