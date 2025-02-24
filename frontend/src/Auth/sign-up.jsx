@@ -47,12 +47,12 @@ export default function SignUp() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <form className="bg-white p-8 rounded-lg shadow-md w-full max-w-2xl" onSubmit={handleSubmit}>
-        <h1 className="text-2xl font-bold text-center">Sign Up</h1>
+        <h1 className="text-2xl font-bold text-center pb-3">Sign Up</h1>
 
         <div className="flex justify-center mb-4">
           <img
             id="previewImage"
-            className="w-32 h-32 rounded-full"
+            className="w-24 h-24 rounded-full"
             src={formData.image ? URL.createObjectURL(formData.image) : userImage}
             alt="Preview"
           />
@@ -107,7 +107,7 @@ export default function SignUp() {
             />
           </div>
 
-          <div className="col-span-2">
+          <div>
             <label className="block text-sm font-medium">Gender</label>
             <div className="flex items-center">
               <label className="mr-4">
