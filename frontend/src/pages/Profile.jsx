@@ -27,7 +27,7 @@ const Profile = ({ user }) => {
           <h2 className='text-primary-text font-bold mt-4'>{user.email}</h2>
           <h4 className='text-primary-text font-bold mt-4'>{user._id}</h4>
           <div>
-            <label className="block text-sm font-medium">Upload Image</label>
+            <label className="block text-sm font-medium">Edit Profile</label>
             <input
               type="file"
               name="image" 

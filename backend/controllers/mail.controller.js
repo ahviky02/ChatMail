@@ -13,6 +13,17 @@ export const getMailUsers = async (req, res) => {
   }
 };
 
+export const getToUsers = async (req, res) => {
+  const { to } = req.query;
+  try {
+    const users = await User.find({ email: { $regex: to, $options: 'i' } });
+    res.status(200).json(users);
+  } catch (error) {
+    console.error('Get to users error:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
 export const getSendMails = async (req, res) => { // Renamed for consistency
   try {
     const mails = await Mail.find({ from: req.query.from });

@@ -7,6 +7,7 @@ import { useAuthStore } from './useAuthStore';
 export const useMailStore = create((set, get) => ({
   sentContents: [],
   inboxContents: [],
+  ToUsers: [],
   sentList: [],
   inboxList: [],
   mailUsers: [],
@@ -27,6 +28,16 @@ export const useMailStore = create((set, get) => ({
       set({ isMailError: true });
     } finally {
       set({ isMailLoading: false });
+    }
+  },
+
+  getToMails: async (to) => {
+    try {
+      const { data } = await axiosInstance.get(`/mail/usersTo?to=${to}`);
+      set({ ToUsers: data });
+    } catch (error) {
+      console.error('Error fetching sent mails:', error);
+    } finally {
     }
   },
 
